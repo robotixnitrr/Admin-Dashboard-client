@@ -1,12 +1,22 @@
-import {Editor} from '@tinymce/tinymce-react'
-import { useRef } from 'react';
-import {Editor as TinyMceEditor} from 'tinymce';
+import { Editor } from "@tinymce/tinymce-react";
+import { useRef } from "react";
+import { Editor as TinyMceEditor } from "tinymce";
 function CreateBlog() {
-   const editorRef = useRef<TinyMceEditor | null>(null);
-   const contentRef = useRef<string>("");
-   function handleContentChange(content: string){
-    contentRef.current = content;
-   }
+  const editorRef = useRef<TinyMceEditor | null>(null);
+  const contentRef = useRef<string>("");
+
+  const title = useRef<string>("");
+  const category = useRef<string>("");
+  const banner = useRef<string>("");
+  const content = useRef<string>("");
+
+  function handleContentChange(e: string) {
+    content.current = e;
+  }
+
+  function createBlog(){
+    console.log(title.current, category.current, banner.current, content.current)
+  }
   return (
     <>
       <div className="card w-100 rounded-4 border-1 border-secondary">
@@ -16,7 +26,8 @@ function CreateBlog() {
           <div className="form-floating mb-3">
             <input
               type="text"
-              className="form-control form-control-lg fs-6 py-3"
+              className="form-control form-control-lg fs-6"
+              onChange={(e) => (title.current = e.target.value)}
               id="title"
               placeholder="Blog Title"
             />
@@ -25,7 +36,11 @@ function CreateBlog() {
             </label>
           </div>
           <div className="form-floating mb-3">
-            <select className="form-select form-select-lg fs-6" id="category">
+            <select
+              className="form-select form-select-lg fs-6"
+              onChange={(e) => (category.current = e.target.value)}
+              id="category"
+            >
               <option value="">Select a Category</option>
               <option value="Projects">Projects</option>
               <option value="News">News</option>
@@ -43,7 +58,8 @@ function CreateBlog() {
             <input
               type="file"
               className="form-control form-control-lg fs-6"
-              id="iamge"
+              onChange = {e => banner.current = e.target.value}
+              id="image"
               placeholder="Select an Image for Banner..."
             />
             <label htmlFor="image">Blog's Banner</label>
@@ -70,7 +86,7 @@ function CreateBlog() {
             />
           </div>
           <div className="mb-3">
-            <button className="btn btn-dark btn rounded-4 fs-4 fw-bold float-end">
+            <button onClick={() => createBlog()} className="btn btn-dark btn rounded-4 fs-4 fw-bold float-end">
               CREATE BLOG
             </button>
           </div>
