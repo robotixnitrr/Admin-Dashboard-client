@@ -8,15 +8,13 @@ function AuthPage() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  function login(){
+  function login() {
     dispatch(setLoading(true));
-    console.log('login')
-    setTimeout(function(){
-      console.log("login")
+    setTimeout(function () {
       dispatch(setLoading(false));
-      sessionStorage.setItem('user',"true");
-      navigate(endpoints.dashboard)
-    },2000);
+      sessionStorage.setItem("user", "true");
+      navigate(endpoints.dashboard);
+    }, 2000);
   }
   return (
     <>
@@ -55,7 +53,10 @@ function AuthPage() {
                   />
                 </div>
                 <div className="mb-4">
-                  <button onClick={() => login()} className="btn btn-dark rounded-3 btn-lg fw-semibold fs-4 float-end w-sm-100 py-2">
+                  <button
+                    onClick={() => login()}
+                    className="btn btn-dark rounded-3 btn-lg fw-semibold fs-4 float-end w-sm-100 py-2"
+                  >
                     LOGIN <Login style={{ width: 30, height: 30 }} />
                   </button>
                 </div>

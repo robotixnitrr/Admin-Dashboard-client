@@ -4,9 +4,9 @@ function CreateEvent() {
   const title = useRef<string>("");
   const category = useRef<string>("");
   const banner = useRef<string>("");
-  const date = useRef<string>("");
+  const date = useRef<Date | null>(null);
   const time = useRef<string>("");
-  const [eventType,setEventType] = useState<"Online" | "Offline" | null>(null);
+  const [eventType,setEventType] = useState<"online" | "offline" | null>(null);
   const venue = useRef<string | null>(null);
 
   function CreateEvent(){
@@ -70,7 +70,7 @@ function CreateEvent() {
               <div className="form-floating mb-3">
                 <input
                   type="date"
-                  onChange={e => date.current = e.target.value}
+                  onChange={e => date.current = new Date(e.target.value)}
                   className="form-control form-control-lg fs-6"
                   id="date"
                   placeholder="Date of Event..."
@@ -101,7 +101,7 @@ function CreateEvent() {
                   id="offline"
                   value={"Offline"}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setEventType(e.target.value as "Offline" | "Online")
+                    setEventType(e.target.value as "offline" | "online")
                   }
                   className="btn-check"
                 />
@@ -114,7 +114,7 @@ function CreateEvent() {
                   id="online"
                   value={"Online"}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setEventType(e.target.value as "Offline" | "Online")
+                    setEventType(e.target.value as "offline" | "online")
                     venue.current = null
                   }
                   }
@@ -125,7 +125,7 @@ function CreateEvent() {
                 </label>
               </div>
             </div>
-            {eventType === "Offline" && (
+            {eventType === "offline" && (
               <div className="form-floating mb-3 col mb-3">
                 <input
                   type="text"
