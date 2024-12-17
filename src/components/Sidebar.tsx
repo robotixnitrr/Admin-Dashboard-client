@@ -5,7 +5,7 @@ import BlogSvg from "../assets/blogs.svg?react";
 import EventSvg from "../assets/events.svg?react";
 import UserSvg from "../assets/users.svg?react";
 import NewsLetterSvg from "../assets/newsletter.svg?react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { endpoints } from "../endPoints";
 
 function Sidebar() {
@@ -15,7 +15,10 @@ function Sidebar() {
     navigate(endpoints.login);
   }
   return (
-    <div className="col-lg-3 col-xl-2">
+    <div
+      className="collapse navbar-md-collapse d-lg-block mb-3 col-lg-3 col-xl-2"
+      id="navbarSupportedContent"
+    >
       <div className="rounded-pill border border-1 shadow-sm border-secondary d-flex align-items-center justify-content-between p-1">
         <div className="d-flex align-items-center">
           <img
@@ -27,7 +30,10 @@ function Sidebar() {
           />
           <p className="fs-6 my-0 ms-2">Amrit Utsav</p>
         </div>
-        <button onClick={() => logout()} className="btn border-0 rounded-circle">
+        <button
+          onClick={() => logout()}
+          className="btn border-0 rounded-circle"
+        >
           <Logout height={30} width={30} />
         </button>
       </div>
@@ -36,46 +42,70 @@ function Sidebar() {
         className="list-group rounded-5 border-0 shadow-sm mt-4 p-3"
         style={{ backgroundColor: "#f0f0f0" }}
       >
-        <a
-          href=""
-          className=" px-3 list-item list-item-active action text-decoration-none text-dark py-3 rounded-4"
-          //   style={{ backgroundColor: "#f0f0f0" }}
+        <NavLink
+          to={`${endpoints.dashboard}`}
+          className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
+          style={({ isActive }) => {
+            return {
+              backgroundColor: isActive ? "white" : "",
+            };
+          }}
         >
           <DashboardSvg height={22} width={22} className="me-2" />
           Dashboard
-        </a>
-        <a
-          href=""
+        </NavLink>
+        <NavLink
+          to={`${endpoints.dashboard}${endpoints.dashboardPaths.manageBlogs}`}
+          style={({ isActive }) => {
+            return {
+              backgroundColor: isActive ? "white" : "",
+            };
+          }}
           className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
           //   style={{ backgroundColor: "#f0f0f0" }}
         >
           <BlogSvg height={22} width={22} className="me-2" />
           Manage Blogs
-        </a>
-        <a
-          href=""
+        </NavLink>
+        <NavLink
+          to={`${endpoints.dashboard}${endpoints.dashboardPaths.manageEvents}`}
+          style={({ isActive }) => {
+            return {
+              backgroundColor: isActive ? "white" : "",
+            };
+          }}
           className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
           //   style={{ backgroundColor: "#f0f0f0" }}
         >
           <EventSvg height={22} width={22} className="me-2" />
           Manage Events
-        </a>
-        <a
-          href=""
+        </NavLink>
+        <NavLink
+          to={`${endpoints.dashboard}${endpoints.dashboardPaths.manageUsers}`}
+          style={({ isActive }) => {
+            return {
+              backgroundColor: isActive ? "white" : "",
+            };
+          }}
           className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
           //   style={{ backgroundColor: "#f0f0f0" }}
         >
           <UserSvg height={22} width={22} className="me-2" />
           Manage Users
-        </a>
-        <a
-          href=""
+        </NavLink>
+        <NavLink
+          to={endpoints.dashboardPaths.home}
+          style={({ isActive }) => {
+            return {
+              backgroundColor: isActive ? "white" : "",
+            };
+          }}
           className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
           //   style={{ backgroundColor: "#f0f0f0" }}
         >
           <NewsLetterSvg height={22} width={22} className="me-2" />
           Send Newsletters
-        </a>
+        </NavLink>
       </div>
     </div>
   );

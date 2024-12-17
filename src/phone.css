@@ -1,0 +1,5 @@
+@media screen and (max-width:768px) {
+    .input-group{
+        width:100% !important ;
+    }
+}

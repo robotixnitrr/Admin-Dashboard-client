@@ -1,33 +1,34 @@
-import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import "./App.css";
 import { endpoints } from "./endPoints";
 import { useEffect } from "react";
-import {toast} from 'react-toastify';
+import { toast } from "react-toastify";
 import AuthPage from "./pages/auth/AuthPage";
 import type { RootState } from "./redux/store";
 import { useSelector } from "react-redux";
-import DashboardPage from "./pages/dashboard/DashboardPage";
 import Navbar from "./components/Navbar";
 import Loader from "./components/Loader";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 function App() {
-  const loading = useSelector((state: RootState) => state.loader.loading)
+  const loading = useSelector((state: RootState) => state.loader.loading);
   return (
     <Router>
-      {
-        loading
-        &&
-        <Loader />
-      }
-      <Navbar/>
+      {loading && <Loader />}
+      <Navbar />
       <Routes>
-        <Route 
-          path={endpoints.login}
-          element={<AuthPage />}
-        />
+        <Route path="/" element={<Navigate to={endpoints.dashboard}/>} />
+        <Route path={endpoints.login} element={<AuthPage />} />
         <Route
-          path={endpoints.dashboard}
-          element={<ProtectedRoutes component={<DashboardPage/>} />}
+          path={endpoints.dashboardAll}
+          element={<ProtectedRoutes component={<Dashboard />} />}
         />
       </Routes>
     </Router>
