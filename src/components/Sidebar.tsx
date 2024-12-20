@@ -7,105 +7,44 @@ import UserSvg from "../assets/users.svg?react";
 import NewsLetterSvg from "../assets/newsletter.svg?react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { endpoints } from "../endPoints";
+import { isDragActive } from "motion";
 
 function Sidebar() {
   const navigate = useNavigate();
-  function logout() {
+
+  // Function to handle user logout
+  const logout = () => {
     sessionStorage.removeItem("user");
     navigate(endpoints.login);
-  }
+  };
+
   return (
-    <div
-      className="collapse navbar-md-collapse d-lg-block mb-3 col-lg-3 col-xl-2"
-      id="navbarSupportedContent"
-    >
-      <div className="rounded-pill border border-1 shadow-sm border-secondary d-flex align-items-center justify-content-between p-1">
-        <div className="d-flex align-items-center">
-          <img
-            src={profileImage}
-            alt="profile image"
-            width={40}
-            height={40}
-            className="rounded-circle img-fluid"
-          />
-          <p className="fs-6 my-0 ms-2">Amrit Utsav</p>
-        </div>
-        <button
-          onClick={() => logout()}
-          className="btn border-0 rounded-circle"
-        >
-          <Logout height={30} width={30} />
+    <div className="w-64 h-full p-6 rounded-4 shadow-lg" aria-label="Sidebar Navigation">
+      <div className="flex items-center mb-6">
+        {/* <img src={profileImage} alt="Profile of Amrit Utsav" className="rounded-full w-16 h-16 border-2 border-gray-700 shadow-md" /> */}
+        <p className="text-xl font-bold ml-4">Hello Admin!</p>
+        <button onClick={logout} className="ml-auto p-2 hover:bg-gray-400 rounded-full transition duration-200" aria-label="Logout">
+          <Logout className="h-6 w-6" />
         </button>
       </div>
-      {/* sidebar */}
-      <div
-        className="list-group rounded-5 border-0 shadow-sm mt-4 p-3"
-        style={{ backgroundColor: "#f0f0f0" }}
-      >
-        <NavLink
-          to={`${endpoints.dashboard}`}
-          className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
-          style={({ isActive }) => {
-            return {
-              backgroundColor: isActive ? "white" : "",
-            };
-          }}
-        >
-          <DashboardSvg height={22} width={22} className="me-2" />
-          Dashboard
-        </NavLink>
-        <NavLink
-          to={`${endpoints.dashboard}${endpoints.dashboardPaths.manageBlogs}`}
-          style={({ isActive }) => {
-            return {
-              backgroundColor: isActive ? "white" : "",
-            };
-          }}
-          className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
-          //   style={{ backgroundColor: "#f0f0f0" }}
-        >
-          <BlogSvg height={22} width={22} className="me-2" />
-          Manage Blogs
-        </NavLink>
-        <NavLink
-          to={`${endpoints.dashboard}${endpoints.dashboardPaths.manageEvents}`}
-          style={({ isActive }) => {
-            return {
-              backgroundColor: isActive ? "white" : "",
-            };
-          }}
-          className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
-          //   style={{ backgroundColor: "#f0f0f0" }}
-        >
-          <EventSvg height={22} width={22} className="me-2" />
-          Manage Events
-        </NavLink>
-        <NavLink
-          to={`${endpoints.dashboard}${endpoints.dashboardPaths.manageUsers}`}
-          style={({ isActive }) => {
-            return {
-              backgroundColor: isActive ? "white" : "",
-            };
-          }}
-          className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
-          //   style={{ backgroundColor: "#f0f0f0" }}
-        >
-          <UserSvg height={22} width={22} className="me-2" />
-          Manage Users
-        </NavLink>
-        <NavLink
-          to={endpoints.dashboardPaths.home}
-          style={({ isActive }) => {
-            return {
-              backgroundColor: isActive ? "white" : "",
-            };
-          }}
-          className=" px-3 list-item list-item-active text-decoration-none text-dark py-3 rounded-4"
-          //   style={{ backgroundColor: "#f0f0f0" }}
-        >
-          <NewsLetterSvg height={22} width={22} className="me-2" />
-          Send Newsletters
-        </NavLink>
+      <div className="flex flex-col space-y-3">
+        {[
+          { to: endpoints.dashboard, label: "Dashboard", icon: <DashboardSvg className="h-6 w-6" /> },
+          { to: `${endpoints.dashboard}${endpoints.dashboardPaths.manageBlogs}`, label: "Manage Blogs", icon: <BlogSvg className="h-6 w-6" /> },
+          { to: `${endpoints.dashboard}${endpoints.dashboardPaths.manageEvents}`, label: "Manage Events", icon: <EventSvg className="h-6 w-6" /> },
+          { to: `${endpoints.dashboard}${endpoints.dashboardPaths.manageUsers}`, label: "Manage Users", icon: <UserSvg className="h-6 w-6" /> },
+          { to: endpoints.dashboardPaths.home, label: "Send Newsletters", icon: <NewsLetterSvg className="h-6 w-6" /> },
+        ].map(({ to, label, icon }) => (
+          <NavLink
+            key={label}
+            to={to}
+            className="flex items-center p-3 rounded-lg text-md hover:bg-gray-700 hover:text-white transition-colors duration-300"
+            end={to === endpoints.dashboard || to === endpoints.dashboardPaths.home}
+          >
+            {icon}
+            <span className="ml-3 font-medium text-md">{label}</span>
+          </NavLink>
+        ))}
       </div>
     </div>
   );
