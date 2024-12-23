@@ -8,6 +8,7 @@ export const endpoints = {
         manageUsers:'manage-users/',
         manageBlogs:'manage-blogs/',
         manageEvents:'manage-events/',
+        createBlog:'create-blog/',
     },
     login:'/admin-login/',
 }

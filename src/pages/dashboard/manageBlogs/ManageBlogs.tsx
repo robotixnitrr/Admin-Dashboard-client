@@ -2,14 +2,16 @@ import EditSvg from "../../../assets/edit.svg?react";
 import DeleteSvg from "../../../assets/delete.svg?react";
 import profileImage from "../../../assets/profile.webp";
 import Searchbar from "../../../components/Searchbar";
-import { useEffect,  useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 interface IBlog {
   id: number;
   title: string;
   category: string;
   author: string;
-  banner: string;
+  imageUrl: string;
 }
 
 function ManageBlogs() {
@@ -17,80 +19,41 @@ function ManageBlogs() {
     "a-z" | "z-a" | "popularity" | "mostLiked" | "leastLiked"
   >("a-z");
 
-  const [demoData, setDemoData] = useState<IBlog[]>([
-    {
-      id: 1,
-      title: "Advancements in Humanoid Robotics",
-      category: "Robotics",
-      author: "Dr. Alice Carter",
-      banner: "https://via.placeholder.com/800x400?text=Humanoid+Robotics",
-    },
-    {
-      id: 2,
-      title: "AI-Powered Robots Revolutionizing Industries",
-      category: "Robotics",
-      author: "John Matthews",
-      banner: "https://via.placeholder.com/800x400?text=AI+Powered+Robots",
-    },
-    {
-      id: 3,
-      title: "Exploring Robotics in Space Exploration",
-      category: "Robotics",
-      author: "Dr. Sarah Johnson",
-      banner:
-        "https://via.placeholder.com/800x400?text=Space+Exploration+Robots",
-    },
-    {
-      id: 4,
-      title: "The Role of Robotics in Healthcare",
-      category: "Robotics",
-      author: "Emily Watson",
-      banner: "https://via.placeholder.com/800x400?text=Robotics+in+Healthcare",
-    },
-    {
-      id: 5,
-      title: "How Robotics is Shaping the Future of Agriculture",
-      category: "Robotics",
-      author: "Mark Peterson",
-      banner:
-        "https://via.placeholder.com/800x400?text=Robotics+in+Agriculture",
-    },
-  ]);
-  useEffect(() => {
-    if (demoData !== null) {
-      switch (sortType) {
-        case "a-z": {
-          const tempArr = [...demoData].sort((a, b) => a.title.localeCompare(b.title));
-          setDemoData(() => tempArr);
-          break;
-        }
-        case "z-a": {
-          const tempArr = [...demoData].sort((a, b) => a.title.localeCompare(b.title)).reverse();
-          setDemoData(() => tempArr);
-          break;
-        }
-        default:
-        // DO NOTHING
-      }
+  const [demoData, setDemoData] = useState<IBlog[]>([]);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      const blogResponse = await api("/post")
+      console.log(blogResponse);
+      setDemoData(blogResponse.data)
     }
+    fetchBlogs();
   }, [sortType]);
-  
+
   function handleSort(
     sortType: "a-z" | "z-a" | "popularity" | "mostLiked" | "leastLiked"
   ) {
     setSortType(() => sortType);
   }
-  function handleSearch(str: string){
-    if(str.length > 0) {
+  function handleSearch(str: string) {
+    if (str.length > 0) {
       const arr = demoData.filter(d => d.title.toLocaleLowerCase().includes(str.toLocaleLowerCase()));
       setDemoData(() => arr);
     }
   }
+
+  const handleCreateBlog = () => {
+    navigate("/dashboard/create-blog");
+  };
+
   return (
     <div className="container-fluid bg-white p-2">
       <p className="fs-2 fw-bold">Manage Blogs</p>
-      <Searchbar 
+      <button onClick={handleCreateBlog} className="btn btn-primary">
+        Create Blog
+      </button>
+      <Searchbar
         sortType={sortType}
         placeholder="Enter blog title to search."
         handleSort={handleSort}
@@ -107,7 +70,7 @@ function ManageBlogs() {
                 <div className="card-body">
                   <div className="ratio ratio-16x9">
                     <img
-                      src={i.banner}
+                      src={i.imageUrl}
                       alt=""
                       className="img-fluid rounded-2"
                     />

@@ -7,7 +7,6 @@ import UserSvg from "../assets/users.svg?react";
 import NewsLetterSvg from "../assets/newsletter.svg?react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { endpoints } from "../endPoints";
-import { isDragActive } from "motion";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -33,13 +32,15 @@ function Sidebar() {
           { to: `${endpoints.dashboard}${endpoints.dashboardPaths.manageBlogs}`, label: "Manage Blogs", icon: <BlogSvg className="h-6 w-6" /> },
           { to: `${endpoints.dashboard}${endpoints.dashboardPaths.manageEvents}`, label: "Manage Events", icon: <EventSvg className="h-6 w-6" /> },
           { to: `${endpoints.dashboard}${endpoints.dashboardPaths.manageUsers}`, label: "Manage Users", icon: <UserSvg className="h-6 w-6" /> },
-          { to: endpoints.dashboardPaths.home, label: "Send Newsletters", icon: <NewsLetterSvg className="h-6 w-6" /> },
+          // { to: endpoints.dashboardPaths.home, label: "Send Newsletters", icon: <NewsLetterSvg className="h-6 w-6" /> },
         ].map(({ to, label, icon }) => (
           <NavLink
             key={label}
             to={to}
-            className="flex items-center p-3 rounded-lg text-md hover:bg-gray-700 hover:text-white transition-colors duration-300"
-            end={to === endpoints.dashboard || to === endpoints.dashboardPaths.home}
+            className={({ isActive }) => 
+              `flex items-center p-3 rounded-lg text-md transition-colors duration-300 ${isActive ? 'bg-gray-700 text-white' : 'hover:bg-gray-700 hover:text-white'}`
+            }
+            end={to === endpoints.dashboard}
           >
             {icon}
             <span className="ml-3 font-medium text-md">{label}</span>

@@ -18,13 +18,13 @@ import Loader from "./components/Loader";
 import Dashboard from "./pages/dashboard/Dashboard";
 
 function App() {
-  const loading = useSelector((state: RootState) => state.loader.loading);
+  const loading = useSelector((state: RootState) => state.loaderState.loading);
   return (
     <Router>
       {loading && <Loader />}
       <Navbar />
       <Routes>
-        <Route path="/" element={<Navigate to={endpoints.dashboard}/>} />
+        <Route path="/" element={<Navigate to={endpoints.dashboard} />} />
         <Route path={endpoints.login} element={<AuthPage />} />
         <Route
           path={endpoints.dashboardAll}

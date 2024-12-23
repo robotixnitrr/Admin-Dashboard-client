@@ -1,6 +1,6 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 
-interface LoaderSliceInterface{
+export interface LoaderSliceInterface{
     loading: boolean;
 }
 
