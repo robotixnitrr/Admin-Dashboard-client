@@ -4,6 +4,11 @@ import Searchbar from "../../../components/Searchbar";
 import { useEffect, useState } from "react";
 import CalendarSvg from '../../../assets/calendar.svg?react'
 import LocationSvg from '../../../assets/location.svg?react'
+import { toast } from "react-toastify";
+import api from "../../../api/axios";
+import CustomModal from '../../../components/CustomModal';
+import CreateEvent from '../../../components/CreateEvent';
+
 interface IEvent {
   id: number;
   title: string;
@@ -11,7 +16,7 @@ interface IEvent {
   banner: string;
   date: Date;
   time: string;
-  type:"online" | "offline";
+  type: "online" | "offline";
   venue: string | null;
 }
 
@@ -20,62 +25,55 @@ function ManageEvents() {
     "a-z" | "z-a" | "popularity" | "mostLiked" | "leastLiked"
   >("a-z");
 
-  const [eventData, setEventData] = useState<IEvent[]>([
-    {
-      id: 1,
-      title: "Robotics Innovation Conference 2024",
-      category: "Conference",
-      banner:
-        "https://via.placeholder.com/800x400?text=Robotics+Innovation+Conference",
-      date: new Date("2024-02-15"),
-      time: "10:00 AM",
-      type: "offline",
-      venue:'E-Hall, NIT Raipur'
-    },
-    {
-      id: 2,
-      title: "AI in Robotics Webinar",
-      category: "Webinar",
-      banner: "https://via.placeholder.com/800x400?text=AI+in+Robotics+Webinar",
-      date: new Date("2024-03-10"),
-      time: "03:00 PM",
-      type: "online",
-      venue:null
-    },
-    {
-      id: 3,
-      title: "Hands-on Workshop: Building Autonomous Robots",
-      category: "Workshop",
-      banner:
-        "https://via.placeholder.com/800x400?text=Autonomous+Robots+Workshop",
-      date: new Date("2024-04-05"),
-      time: "09:30 AM",
-      type: "offline",
-      venue:'E-Hall, NIT Raipur'
-    },
-    {
-      id: 4,
-      title: "Future of Robotics Panel Discussion",
-      category: "Panel Discussion",
-      banner:
-        "https://via.placeholder.com/800x400?text=Future+of+Robotics+Panel",
-      date: new Date("2024-05-20"),
-      time: "01:00 PM",
-      type: "online",
-      venue:null
-    },
-    {
-      id: 5,
-      title: "Robotics in Healthcare Expo",
-      category: "Expo",
-      banner:
-        "https://via.placeholder.com/800x400?text=Robotics+in+Healthcare+Expo",
-      date: new Date("2024-06-18"),
-      time: "11:00 AM",
-      type: "offline",
-      venue:'CCC, Bihar, NIT Raipur'
-    },
-  ]);
+  const [showModal, setShowModal] = useState(false);
+  const [eventData, setEventData] = useState<IEvent[]>([]);
+  const [newEvent, setNewEvent] = useState<IEvent>({
+    id: 0,
+    title: "",
+    category: "",
+    banner: "",
+    date: new Date(),
+    time: "",
+    type: "online",
+    venue: null,
+  });
+
+  const fetchEvents = async () => {
+    try {
+      const response = await api.get("/events");
+      setEventData(response.data);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      toast.error("Failed to fetch events.");
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewEvent(prevState => ({
+      ...prevState,
+      [name]: name === "date" ? new Date(value) : value,
+    }));
+  };
+
+  const handleCreateEvent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/events", newEvent);
+      setEventData(prevData => [...prevData, response.data]);
+      toast.success("Event created successfully!");
+      setNewEvent({ id: 0, title: "", category: "", banner: "", date: new Date(), time: "", type: "online", venue: null });
+    } catch (error) {
+      console.error("Error creating event:", error);
+      toast.error("Failed to create event.");
+    }
+    handleClose();
+  };
+
   useEffect(() => {
     if (eventData !== null) {
       switch (sortType) {
@@ -112,9 +110,21 @@ function ManageEvents() {
       setEventData(() => arr);
     }
   }
+
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
+
   return (
     <div className="container-fluid bg-white p-2">
       <p className="fs-2 fw-bold">Manage Events</p>
+      <button onClick={handleShow} className="btn btn-primary">Create Event</button>
+
+      {showModal && (
+        <CustomModal show={showModal} onClose={handleClose}>
+          <CreateEvent />
+        </CustomModal>
+      )}
+
       <Searchbar
         sortType={sortType}
         placeholder="Enter event title to search."
@@ -123,6 +133,7 @@ function ManageEvents() {
       />
       <div className="row g-2">
         {eventData?.map((i) => {
+          const eventDate = new Date(i.date);
           return (
             <div key={i.id} className="col-lg-3 d-flex align-items-stretch ">
               <div
@@ -159,7 +170,7 @@ function ManageEvents() {
                   <div className="d-flex mb-2 align-items-stretch gap-2">
                     <CalendarSvg height={20} width={20} />
                     <p className="small fw-light my-0">
-                      {i.date.toLocaleDateString(undefined, {
+                      {eventDate.toLocaleDateString(undefined, {
                         year: "numeric",
                         month: "long",
                         day: "numeric",

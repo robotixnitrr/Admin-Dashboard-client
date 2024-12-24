@@ -1,10 +1,14 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef } from "react";
 import { Editor as TinyMceEditor } from "tinymce";
+import { createPost } from "../api/postApi";
+import { Blog } from "../types/Blog";
+import { useNavigate } from "react-router-dom";
+
 function CreateBlog() {
   const editorRef = useRef<TinyMceEditor | null>(null);
   const contentRef = useRef<string>("");
-
+  const navigate = useNavigate();
   const title = useRef<string>("");
   const category = useRef<string>("");
   const banner = useRef<string>("");
@@ -14,8 +18,39 @@ function CreateBlog() {
     content.current = e;
   }
 
-  function createBlog(){
-    console.log(title.current, category.current, banner.current, content.current)
+
+  const handleCreatePost = async (postData: Partial<Blog>) => {
+    const cleanContent = postData.content?.replace(/<p>/g, '').replace(/<\/p>/g, '');
+
+    const dataToSend = { ...postData, content: cleanContent };
+    // console.log(dataToSend);
+
+
+    try {
+      const response = await createPost(dataToSend);
+      console.log(response);
+
+      // setPosts([response.data.data, ...posts]);
+      console.log("sucess");
+
+      // setPost({ title: '', content: '', author: '', category: '', imageUrl: '' });
+      console.log("sucess1");
+      navigate(`/dashboard/manage-blogs/`);
+
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
+  };
+
+
+  function createBlog() {
+    const postData = {
+      title: title.current,
+      category: category.current,
+      imageUrl: banner.current,
+      content: content.current
+    }
+    handleCreatePost(postData);
   }
   return (
     <>
@@ -58,7 +93,7 @@ function CreateBlog() {
             <input
               type="file"
               className="form-control form-control-lg fs-6"
-              onChange = {e => banner.current = e.target.value}
+              onChange={e => banner.current = e.target.value}
               id="image"
               placeholder="Select an Image for Banner..."
             />

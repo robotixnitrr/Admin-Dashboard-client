@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStats } from "../../../redux/statsSlice";
 import { AppDispatch } from "../../../redux/store";
+import CreateEvent from "../../../components/CreateEvent";
 
 function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -62,7 +63,6 @@ function HomePage() {
             <p className="small text-nowrap">Project Submissions</p>
           </div>
         </div>
-        {/* <CreateEvent /> */}
       </div>
       {/* <div className="col-12 col-lg-6 mt-3 mt-md-0">
         <CreateBlog />
