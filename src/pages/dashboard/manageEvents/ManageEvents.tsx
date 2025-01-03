@@ -13,7 +13,7 @@ interface IEvent {
   id: number;
   title: string;
   category: string;
-  banner: string;
+  imageUrl: string;
   date: Date;
   time: string;
   type: "online" | "offline";
@@ -31,7 +31,7 @@ function ManageEvents() {
     id: 0,
     title: "",
     category: "",
-    banner: "",
+    imageUrl: "",
     date: new Date(),
     time: "",
     type: "online",
@@ -66,7 +66,7 @@ function ManageEvents() {
       const response = await api.post("/events", newEvent);
       setEventData(prevData => [...prevData, response.data]);
       toast.success("Event created successfully!");
-      setNewEvent({ id: 0, title: "", category: "", banner: "", date: new Date(), time: "", type: "online", venue: null });
+      setNewEvent({ id: 0, title: "", category: "", imageUrl: "", date: new Date(), time: "", type: "online", venue: null });
     } catch (error) {
       console.error("Error creating event:", error);
       toast.error("Failed to create event.");
@@ -143,7 +143,7 @@ function ManageEvents() {
                 <div className="card-body">
                   <div className="ratio ratio-16x9 card-img">
                     <img
-                      src={i.banner}
+                      src={i.imageUrl}
                       alt=""
                       className="img-fluid rounded-2"
                     />
