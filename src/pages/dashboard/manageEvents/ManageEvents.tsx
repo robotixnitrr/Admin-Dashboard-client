@@ -27,16 +27,16 @@ function ManageEvents() {
 
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState<IEvent[]>([]);
-  const [newEvent, setNewEvent] = useState<IEvent>({
-    id: 0,
-    title: "",
-    category: "",
-    banner: "",
-    date: new Date(),
-    time: "",
-    type: "online",
-    venue: null,
-  });
+  // const [newEvent, setNewEvent] = useState<IEvent>({
+  //   id: 0,
+  //   title: "",
+  //   category: "",
+  //   banner: "",
+  //   date: new Date(),
+  //   time: "",
+  //   type: "online",
+  //   venue: null,
+  // });
 
   const fetchEvents = async () => {
     try {
@@ -52,27 +52,27 @@ function ManageEvents() {
     fetchEvents();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setNewEvent(prevState => ({
-      ...prevState,
-      [name]: name === "date" ? new Date(value) : value,
-    }));
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  //   const { name, value } = e.target;
+  //   setNewEvent(prevState => ({
+  //     ...prevState,
+  //     [name]: name === "date" ? new Date(value) : value,
+  //   }));
+  // };
 
-  const handleCreateEvent = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await api.post("/events", newEvent);
-      setEventData(prevData => [...prevData, response.data]);
-      toast.success("Event created successfully!");
-      setNewEvent({ id: 0, title: "", category: "", banner: "", date: new Date(), time: "", type: "online", venue: null });
-    } catch (error) {
-      console.error("Error creating event:", error);
-      toast.error("Failed to create event.");
-    }
-    handleClose();
-  };
+  // const handleCreateEvent = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await api.post("/events", newEvent);
+  //     setEventData(prevData => [...prevData, response.data]);
+  //     toast.success("Event created successfully!");
+  //     setNewEvent({ id: 0, title: "", category: "", banner: "", date: new Date(), time: "", type: "online", venue: null });
+  //   } catch (error) {
+  //     console.error("Error creating event:", error);
+  //     toast.error("Failed to create event.");
+  //   }
+  //   handleClose();
+  // };
 
   useEffect(() => {
     if (eventData !== null) {

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStats } from "../../../redux/statsSlice";
 import { AppDispatch } from "../../../redux/store";
-import CreateEvent from "../../../components/CreateEvent";
 
 function HomePage() {
   const dispatch = useDispatch<AppDispatch>();

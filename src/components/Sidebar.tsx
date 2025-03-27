@@ -1,10 +1,10 @@
-import profileImage from "../assets/profile.webp";
+// import profileImage from "../assets/profile.webp";
 import Logout from "../assets/logout.svg?react";
 import DashboardSvg from "../assets/dashboard.svg?react";
 import BlogSvg from "../assets/blogs.svg?react";
 import EventSvg from "../assets/events.svg?react";
 import UserSvg from "../assets/users.svg?react";
-import NewsLetterSvg from "../assets/newsletter.svg?react";
+// import NewsLetterSvg from "../assets/newsletter.svg?react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { endpoints } from "../endPoints";
 
