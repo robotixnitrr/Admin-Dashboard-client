@@ -1,17 +1,43 @@
 import { useRef, useState } from "react";
+import { createEvent } from "../api/eventApi";
 
 function CreateEvent() {
   const title = useRef<string>("");
   const category = useRef<string>("");
-  const banner = useRef<string>("");
+  const imageUrl = useRef<string>("");
   const date = useRef<Date | null>(null);
   const time = useRef<string>("");
   const [eventType,setEventType] = useState<"online" | "offline" | null>(null);
-  const venue = useRef<string | null>(null);
+  const venue = useRef<string>("");
+  const description = useRef<string>("");
+  const registrationLink = useRef<string>("");
+  const capacity = useRef<Number | null>(null);
 
-  function CreateEvent(){
-    console.log(title.current,category.current,date.current,time.current,banner.current,eventType,venue.current)
+
+  async function CreateEvent(){
+
+    const eventData = {
+      title: title.current,
+      category: category.current,
+      imageUrl: imageUrl.current,
+      date: date.current,         
+      time: time.current,
+      eventType: eventType,
+      venue: venue.current,
+      description: description.current,
+      registrationLink: registrationLink.current,
+      capacity: capacity.current
+    };
+
+    try{
+      const response = await createEvent(eventData);
+      console.log("EVENT CREATED !!!",response.data);
+    }catch(error){
+      console.log("ERROR CREATING EVENT ",error);
+    }
+
   }
+
   return (
     <>
       <div className="card w-100 rounded-4 border-1 border-secondary mt-4">
@@ -21,7 +47,7 @@ function CreateEvent() {
           <div className="form-floating mb-3">
             <input
               type="text"
-              onChange={e => title.current = e.target.value}
+              onChange={(e) => (title.current = e.target.value)}
               className="form-control form-control-lg fs-6"
               id="title"
               placeholder="Event Title"
@@ -36,7 +62,7 @@ function CreateEvent() {
                 <select
                   className="form-select form-select-lg fs-6"
                   id="category"
-                  onChange={e => category.current = e.target.value}
+                  onChange={(e) => (category.current = e.target.value)}
                 >
                   <option value="">Select a Category</option>
                   <option value="Projects">Projects</option>
@@ -57,11 +83,11 @@ function CreateEvent() {
                 <input
                   type="file"
                   className="form-control form-control-lg fs-6"
-                  onChange= {e => banner.current = e.target.value}
+                  onChange={(e) => (imageUrl.current = e.target.value)}
                   id="image"
-                  placeholder="Select an Image for Banner..."
+                  placeholder="Select an Image for imageUrl..."
                 />
-                <label htmlFor="image">Event's Banner</label>
+                <label htmlFor="image">Event's imageUrl</label>
               </div>
             </div>
           </div>
@@ -70,7 +96,7 @@ function CreateEvent() {
               <div className="form-floating mb-3">
                 <input
                   type="date"
-                  onChange={e => date.current = new Date(e.target.value)}
+                  onChange={(e) => (date.current = new Date(e.target.value))}
                   className="form-control form-control-lg fs-6"
                   id="date"
                   placeholder="Date of Event..."
@@ -83,9 +109,9 @@ function CreateEvent() {
                 <input
                   type="time"
                   className="form-control form-control-lg fs-6"
-                  onChange={e => time.current = e.target.value}
+                  onChange={(e) => (time.current = e.target.value)}
                   id="time"
-                  placeholder="Select an Image for Banner..."
+                  placeholder="Select an Image for imageUrl..."
                 />
                 <label htmlFor="time">Time of Event</label>
               </div>
@@ -99,7 +125,7 @@ function CreateEvent() {
                   type="radio"
                   name="eventType"
                   id="offline"
-                  value={"Offline"}
+                  value={"offline"}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setEventType(e.target.value as "offline" | "online")
                   }
@@ -112,12 +138,11 @@ function CreateEvent() {
                   type="radio"
                   name="eventType"
                   id="online"
-                  value={"Online"}
+                  value={"online"}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setEventType(e.target.value as "offline" | "online")
-                    venue.current = null
-                  }
-                  }
+                    setEventType(e.target.value as "offline" | "online");
+                    // venue.current = null;
+                  }}
                   className="btn-check"
                 />
                 <label className="btn btn-dark" htmlFor="online">
@@ -130,19 +155,73 @@ function CreateEvent() {
                 <input
                   type="text"
                   required
-                  onChange={e => venue.current = e.target.value}
+                  onChange={(e) => (venue.current = e.target.value)}
                   className="form-control form-control-lg fs-6 py-3"
                   id="venue"
                   placeholder="Venue of Event"
                 />
-                <label htmlFor="title" className="text-secondary">
+                <label htmlFor="venue" className="text-secondary">
                   Venue of Event <span className="text-danger">*</span>
                 </label>
               </div>
             )}
+            {eventType === "online" && (
+              <div className="form-floating mb-3 col mb-3">
+                <input
+                  type="text"
+                  required
+                  onChange={(e) => (venue.current = e.target.value)}
+                  className="form-control form-control-lg fs-6 py-3"
+                  id="onlineVenue"
+                  placeholder="Online Platform (e.g., Zoom, Google Meet)"
+                />
+                <label htmlFor="onlineVenue" className="text-secondary">
+                  Online Platform (e.g., Zoom, Google Meet)
+                </label>
+              </div>
+            )}
+          </div>
+          <div className="form-floating mb-3">
+            <textarea
+              onChange={(e) => (description.current = e.target.value)}
+              className="form-control form-control-lg fs-6"
+              id="description"
+              placeholder="Event Description"
+              style={{ height: "150px" }}
+            />
+            <label htmlFor="description" className="text-secondary">
+              Event Description
+            </label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              type="number"
+              onChange={(e) => (capacity.current = parseInt(e.target.value))}
+              className="form-control form-control-lg fs-6"
+              id="capacity"
+              placeholder="Capacity"
+            />
+            <label htmlFor="capacity" className="text-secondary">
+              Capacity
+            </label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              type="text"
+              onChange={(e) => (registrationLink.current = e.target.value)}
+              className="form-control form-control-lg fs-6"
+              id="registrationLink"
+              placeholder="Registration Link"
+            />
+            <label htmlFor="registrationLink" className="text-secondary">
+              Registration Link
+            </label>
           </div>
           <div className="mb-3">
-            <button onClick={() => CreateEvent()} className="btn btn-dark rounded-4 fs-4 fw-bold float-end">
+            <button
+              onClick={() => CreateEvent()}
+              className="btn btn-dark rounded-4 fs-4 fw-bold float-end"
+            >
               CREATE EVENT
             </button>
           </div>
@@ -150,6 +229,7 @@ function CreateEvent() {
       </div>
     </>
   );
+  
 }
 
 export default CreateEvent;

@@ -17,7 +17,6 @@ function EventPage() {
                 console.error('Error fetching events:', error);
             }
         };
-
         fetchEvents();
     }, []);
 

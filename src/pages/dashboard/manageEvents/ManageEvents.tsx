@@ -13,7 +13,7 @@ interface IEvent {
   id: number;
   title: string;
   category: string;
-  banner: string;
+  imageUrl: string;
   date: Date;
   time: string;
   type: "online" | "offline";
@@ -143,7 +143,7 @@ function ManageEvents() {
                 <div className="card-body">
                   <div className="ratio ratio-16x9 card-img">
                     <img
-                      src={i.banner}
+                      src={i.imageUrl}
                       alt=""
                       className="img-fluid rounded-2"
                     />

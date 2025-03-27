@@ -23,7 +23,6 @@ function Dashboard() {
             <Route path={endpoints.dashboardPaths.manageEvents} element={<ManageEvents />} />
             <Route path={endpoints.dashboardPaths.manageUsers} element={<ManageUsers />} />
             <Route path={endpoints.dashboardPaths.createBlog} element={<CreateBlogPage />} />
-
           </Routes>
         </motion.div>
       </div>
